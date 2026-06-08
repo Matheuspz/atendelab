@@ -5,7 +5,7 @@ COLLATE utf8mb4_general_ci;
 USE atendelab;
 
 CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
@@ -24,10 +24,41 @@ VALUES (
 );
 
 CREATE TABLE pessoas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
+    documento VARCHAR(20) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
-    telefone VARCHAR(14) NOT NULL,
-    cpf VARCHAR(14) NOT NULL UNIQUE
+    telefone VARCHAR(20) NOT NULL,
+    curso VARCHAR(100) NOT NULL,
+    periodo VARCHAR(100) NOT NULL,
+    status VARCHAR(100) NOT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE tipo_atendimento (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT NOT NULL,
+    status ENUM('ativo', 'inativo') DEFAULT 'ativo',
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+
+CREATE TABLE atendimentos (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_tipo_atendimento INT NOT NULL,
+    id_pessoa INT NOT NULL,
+    id_usuario INT NOT NULL,
+    data_atendimento DATE NOT NULL,
+    hora_atendimento TIME NOT NULL,
+    descricao TEXT NOT NULL,
+    observacao_final TEXT NOT NULL,
+    status ENUM('ativo', 'inativo') DEFAULT 'ativo',
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    CONSTRAINT fk_atendimentos_tipo_atendimento
+        FOREIGN KEY(id_tipo_atendimento) REFERENCES tipo_atendimento(id)
+    CONSTRAINT fk_atendimentos_pessoas
+        FOREIGN KEY(id_pessoa) REFERENCES pessoas(id)
+    CONSTRAINT fk_atendimentos_usuarios
+        FOREIGN KEY(id_usuario) REFERENCES usuarios(id)
+)
