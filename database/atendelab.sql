@@ -34,6 +34,17 @@ CREATE TABLE pessoas (
     status VARCHAR(100) NOT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+/* TESTE DA TABELA PESSOAS */
+INSERT INTO pessoas (nome, documento, email, telefone, curso, periodo, status)
+VALUES (
+    'Matheus',
+    'documento',
+    'matheus@gmail.com',
+    '+55 (47)11223-4456',
+    'engenharia de software',
+    '5º Semestre',
+    'ativo'
+);
 
 CREATE TABLE tipo_atendimento (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -41,6 +52,13 @@ CREATE TABLE tipo_atendimento (
     descricao TEXT NOT NULL,
     status ENUM('ativo', 'inativo') DEFAULT 'ativo',
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+/* TESTE DA TABELA TIPO_ATENDIMENTO */
+INSERT INTO tipo_atendimento (nome, descricao, status)
+VALUES (
+    'Boletim',
+    'Solicitação de boletim escolar',
+    'ativo'
 )
 
 CREATE TABLE atendimentos (
@@ -53,12 +71,24 @@ CREATE TABLE atendimentos (
     descricao TEXT NOT NULL,
     observacao_final TEXT NOT NULL,
     status ENUM('ativo', 'inativo') DEFAULT 'ativo',
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_atendimentos_tipo_atendimento
-        FOREIGN KEY(id_tipo_atendimento) REFERENCES tipo_atendimento(id)
+        FOREIGN KEY(id_tipo_atendimento) REFERENCES tipo_atendimento(id),
     CONSTRAINT fk_atendimentos_pessoas
-        FOREIGN KEY(id_pessoa) REFERENCES pessoas(id)
+        FOREIGN KEY(id_pessoa) REFERENCES pessoas(id),
     CONSTRAINT fk_atendimentos_usuarios
         FOREIGN KEY(id_usuario) REFERENCES usuarios(id)
+);
+/* TESTE DA TABELA ATENDIMENTOS */
+INSERT INTO atendimentos (id_tipo_atendimento, id_pessoa, id_usuario, data_atendimento, hora_atendimento, descricao, observacao_final, status)
+VALUES (
+    1,
+    1,
+    1,
+    '2026-06-09',
+    '20:58:00',
+    'Solicitação de boletim escolar',
+    'Solicitação completa e documento enviado',
+    'inativo'
 )
