@@ -46,15 +46,15 @@ VALUES (
     'ativo'
 );
 
-CREATE TABLE tipo_atendimento (
+CREATE TABLE tipos_atendimentos (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     descricao TEXT NOT NULL,
     status ENUM('ativo', 'inativo') DEFAULT 'ativo',
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-/* TESTE DA TABELA TIPO_ATENDIMENTO */
-INSERT INTO tipo_atendimento (nome, descricao, status)
+/* TESTE DA TABELA tipos_atendimentos */
+INSERT INTO tipos_atendimentos (nome, descricao, status)
 VALUES (
     'Boletim',
     'Solicitação de boletim escolar',
@@ -63,7 +63,7 @@ VALUES (
 
 CREATE TABLE atendimentos (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    id_tipo_atendimento INT NOT NULL,
+    id_tipos_atendimentos INT NOT NULL,
     id_pessoa INT NOT NULL,
     id_usuario INT NOT NULL,
     data_atendimento DATE NOT NULL,
@@ -73,15 +73,15 @@ CREATE TABLE atendimentos (
     status ENUM('ativo', 'inativo') DEFAULT 'ativo',
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_atendimentos_tipo_atendimento
-        FOREIGN KEY(id_tipo_atendimento) REFERENCES tipo_atendimento(id),
+    CONSTRAINT fk_atendimentos_tipos_atendimentos
+        FOREIGN KEY(id_tipos_atendimentos) REFERENCES tipos_atendimentos(id),
     CONSTRAINT fk_atendimentos_pessoas
         FOREIGN KEY(id_pessoa) REFERENCES pessoas(id),
     CONSTRAINT fk_atendimentos_usuarios
         FOREIGN KEY(id_usuario) REFERENCES usuarios(id)
 );
 /* TESTE DA TABELA ATENDIMENTOS */
-INSERT INTO atendimentos (id_tipo_atendimento, id_pessoa, id_usuario, data_atendimento, hora_atendimento, descricao, observacao_final, status)
+INSERT INTO atendimentos (id_tipos_atendimentos, id_pessoa, id_usuario, data_atendimento, hora_atendimento, descricao, observacao_final, status)
 VALUES (
     1,
     1,
@@ -92,3 +92,25 @@ VALUES (
     'Solicitação completa e documento enviado',
     'inativo'
 )
+
+ALTER TABLE usuarios
+    ADD COLUMN atualizado_em TIMESTAMP
+    DEFAULT CURRENT_TIMESTAMP
+    ON UPDATE CURRENT_TIMESTAMP;
+
+ALTER TABLE pessoas
+    ADD COLUMN observacoes TEXT NULL,
+    ADD COLUMN atualizado_em TIMESTAMP,
+    DEFAULT CURRENT_TIMESTAMP,
+    ON UPDATE CURRENT_TIMESTAMP;
+
+ALTER TABLE tipos_atendimentos
+    ADD COLUMN atualizado_em TIMESTAMP
+    DEFAULT CURRENT_TIMESTAMP,
+    ON UPDATE CURRENT_TIMESTAMP;
+
+ALTER TABLE atendimentos
+    ADD COLUMN observacao_final TEXT NULL,
+    ADD COLUMN atualizado_em TIMESTAMP
+    DEFAULT CURRENT_TIMESTAMP,
+    ON UPDATE CURRENT_TIMESTAMP;
