@@ -158,7 +158,7 @@ class UsuarioController
                                         email = :email,
                                         perfil = :perfil,
                                         status = :status
-                                    WHERE id =: id';
+                                    WHERE id = :id';
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(':nome',$nome);
