@@ -66,6 +66,7 @@ class PessoasController
         try
         {
             $stmt = $this->pdo->prepare(
+<<<<<<< HEAD
                 'INSERT INTO tipos_atendimentos (nome, documento, email, telefone, curso, periodo, status, observacoes)
                 VALUES (:nome, :documento, :email, :telefone, :curso, :periodo, :status, :observacoes)'
             );
@@ -76,6 +77,18 @@ class PessoasController
 
         } catch (PDOException $e) {
             $this->json(['erro' => 'Erro ao cadastrar pessoa', 400]);
+=======
+                'INSERT INTO tipos_atendimentos (nome, descricao, status)
+                VALUES (:nome, :descricao, :status)'
+            );
+            $stmt->execute(compact(
+                'nome', 'descricao', 'status'
+            ));
+            $this->json(['mensagem' => 'Tipo cadastrado com sucesso', 201]);
+
+        } catch (PDOException $e) {
+            $this->json(['erro' => 'Erro ao cadastrar tipo', 400]);
+>>>>>>> features/TiposAtendimentos
         }
     }
 
@@ -83,6 +96,7 @@ class PessoasController
     {
         $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT);
         $nome = trim($_POST['nome'] ?? '');
+<<<<<<< HEAD
         $documento = trim($_POST['documento'] ?? '');
         $telefone = trim($_POST['telefone'] ?? '');
         $email = trim($_POST['email'] ?? '');
@@ -122,6 +136,33 @@ class PessoasController
             $this->json(['mensagem' => 'Pessoa atualizado com sucesso', 201]);
         } catch(PDOException $e) {
             $this->json(['erro' => 'Erro ao atualizar pessoa', 400]);
+=======
+        $documento = trim($_POST['descricao'] ?? '');
+        $status = $_POST['status'] ?? 'ativo';
+
+        if($nome ==='') {
+            $this->json(['erro'=> 'Nome é obrigatório'], 422);
+            return;
+        }
+        if (!in_array($status, ['ativo','inativo'], true)){
+            $this->json(['erro'=> 'Status inválido'], 422);
+            return;
+        }  
+
+        try {
+            $stmt = $this->pdo->prepare(
+                'UPDATE tipos_atendimentos SET nome = :nome,
+                                    descricao = :descricao,
+                                    status = :status,
+                                WHERE id = :id'
+            );
+            $stmt->execute(compact(
+                'id', 'nome', 'descricao', 'status'
+            ));
+            $this->json(['mensagem' => 'Tipo atualizado com sucesso', 201]);
+        } catch(PDOException $e) {
+            $this->json(['erro' => 'Erro ao atualizar tipo', 400]);
+>>>>>>> features/TiposAtendimentos
         }
     }
 
@@ -133,10 +174,17 @@ class PessoasController
         }
 
         $stmt = $this->pdo->prepare(
+<<<<<<< HEAD
             "UPDATE pessoas SET status = 'inativo' WHERE id = :id"
         );
         $stmt->execute(['id' => $id]);
         $this->json(['mensagem' => 'Pessoa invativada com sucesso.']);
+=======
+            "UPDATE tipos_atendimentos SET status = 'inativo' WHERE id = :id"
+        );
+        $stmt->execute(['id' => $id]);
+        $this->json(['mensagem' => 'Tipo invativado com sucesso.']);
+>>>>>>> features/TiposAtendimentos
     }
 
     }
