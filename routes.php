@@ -1,33 +1,60 @@
 <?php
+require_once __DIR___ . '/app/Middleware/auth.php'; 
+require_once ___DIR____ . '/app/Controllers/AuthController.php'; 
+require_once ___DIR__ . '/app/Controllers/UsuariosController.php';
+require_once _DIR_____ . '/app/Controllers/PessoasController.php';
+require_once __DIR__ . '/app/Controllers/TiposAtendimentos Controller.php'; 
+require_once __DIR__ . '/app/Controllers/Atendimentos Controller.php';
 
-require_once __DIR__ . '/app/Controllers/UsuariosController.php';
+$controller = $_GET['controller'] ?? 'auth'; 
+$action = $_GET['action'] ?? 'login';
 
-$controller = $_GET['controller'] ?? 'home'; 
-$action = $_GET['action'] ?? 'index';
-
-if ($controller === 'usuarios') {
-    $usuariosController = new UsuarioController();
+if ($controller === 'auth') {
+    $auth = new AuthController();
     switch ($action) {
-        case 'listar':
-            $usuariosController->listar();
+        case 'login':
+            $auth->exibirLogin();
             break;
-        case 'buscar':
-            $usuariosController->buscarPorId();
+        case 'entrar':
+            $auth->entrar();
             break;
-        case 'criar':
-            $usuariosController->criar();
+        case 'dashboard':
+            exigirAutenticacao();
+            $auth->dashboard();
             break;
-        case 'atualizar':
-            $usuariosController->atualizar();
-            break;
-        case 'excluir':
-            $usuariosController->excluir();
+        case 'logout':
+            $auth->Logout();
             break;
         default:
-            echo 'Ação de usuários não encontradada.';
-            break;
+            http_response_code (404);
+            echo 'Ação de autenticação não encontrada.';
+        
     }
-} else {
-    echo '<h1>AtendeLab</h1>';
-    echo '<p>Projeto em execução. Use ?controller=usuarios&action=listar para testar.</p>';
+    exit;
 }
+
+exigirAutenticacao();   
+
+switch ($controller) {
+    case 'usuarios':
+        $obj = new Usuarios Controller();
+        break;
+    case 'pessoas':
+        $obj = new PessoasController(); 
+        break;
+    case 'tipos':
+        $obj = new TiposAtendimentosController(); 
+        break;
+    case 'atendimentos':
+        $obj = new AtendimentosController(); 
+        break;
+    default:
+        http_response_code(404);
+        exit('Controller não encontrado.');
+}
+if (!method_exists($obj, $action)) {
+    http_response_code(404); 
+    exit('Ação não encontrada.');
+}
+
+$obj->$action();
