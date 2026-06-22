@@ -8,6 +8,14 @@ class UsuarioController
         require __DIR__ . '/../../config/database.php';
         $this->pdo = $pdo;
     }
+
+    public function json(array $dados, int $status = 200) :void
+    {
+        http_response_code($status);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($dados, JSON_UNESCAPED_UNICODE);
+    }
+
     public function listar() :void
     {
         header('Content-Type: application/json; charset=utf-8');
@@ -167,28 +175,18 @@ class UsuarioController
         }
     }
 
-    public function excluir(): void
+    public function inativar() :void 
     {
-        header('Content-Type: applications/json; charset=utf-8');
-
-        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-
+        $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT);
         if(!$id) {
-            http_response_code(400);
-            echo json_encode(['erro'=> 'ID inválido']);
-            return;
+            $this->json(['erro' => 'ID Inválido'], 422);
         }
-        try {
-            $sql = 'DELETE FROM usuarios WHERE id = :id';
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
 
-            echo json_encode(['mensagem'=>'Usuário excluído com sucesso;'],JSON_UNESCAPED_UNICODE);
-        } catch (PDOException $e) {
-            http_response_code(500);
-            echo json_encode(['erro'=>'Erro ao excluir usuário1']);
-        }
+        $stmt = $this->pdo->prepare(
+            "UPDATE usuarios SET status = 'inativo' WHERE id = :id"
+        );
+        $stmt->execute(['id' => $id]);
+        $this->json(['mensagem' => 'Usuario invativada com sucesso.']);
     }
 
-    }
+}

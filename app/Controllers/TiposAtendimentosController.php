@@ -18,8 +18,8 @@ class PessoasController
 
     public function listar() :void
     {
-        $sql = 'SELECT id, nome, documento, email, telefone, curso, periodo, status, observacoes
-                FROM pessoas
+        $sql = 'SELECT id, nome, descricao, status
+                FROM tipos_atendimentos 
                 ORDER BY nome';
         $this->json($this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC));
     }
@@ -34,15 +34,15 @@ class PessoasController
         }
 
         $stmt = $this->pdo->prepare(
-            'SELECT id, nome, documento, email, telefone, curso, periodo, status, observacoes
-                FROM pessoas
+            'SELECT id, nome, descricao, status,
+                FROM tipos_atendimentos
                 WHERE id = :id'
         );
         $stmt->execute(['id' => $id]);
         $pessoa = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if(!$pessoa){
-            $this->json(['erro' => 'Pessoa não encontrada.'], 400);
+            $this->json(['erro' => 'Tipo não encontrada.'], 400);
             return;
         }
         $this->json($pessoa);   
@@ -51,24 +51,13 @@ class PessoasController
     public function criar() :void
     {
         $nome = trim($_POST['nome'] ?? '');
-        $documento = trim($_POST['documento'] ?? '');
-        $telefone = trim($_POST['telefone'] ?? '');
-        $email = trim($_POST['email'] ?? '');
-        $curso = trim($_POST['curso'] ?? '');
-        $periodo = trim($_POST['periodo'] ?? '');
+        $documento = trim($_POST['descricao'] ?? '');
         $status = $_POST['status'] ?? 'ativo';
-        $observacoes = trim($_POST['observacoes'] ?? '');
 
-        if($nome ===''|| $email ===''|| $documento ==='') {
-            $this->json(['erro'=> 'Nome, documento e e-mail são obrigatórios'], 422);
+        if($nome ==='') {
+            $this->json(['erro'=> 'Nome é obrigatório'], 422);
             return;
         }
-
-        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-            $this->json(['erro'=>'E-mail inválido'], 422);
-            return;
-        }
-
         if (!in_array($status, ['ativo','inativo'], true)){
             $this->json(['erro'=> 'Status inválido'], 422);
             return;
@@ -77,7 +66,7 @@ class PessoasController
         try
         {
             $stmt = $this->pdo->prepare(
-                'INSERT INTO pessoas (nome, documento, email, telefone, curso, periodo, status, observacoes)
+                'INSERT INTO tipos_atendimentos (nome, documento, email, telefone, curso, periodo, status, observacoes)
                 VALUES (:nome, :documento, :email, :telefone, :curso, :periodo, :status, :observacoes)'
             );
             $stmt->execute(compact(
