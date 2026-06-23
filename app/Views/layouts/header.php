@@ -85,3 +85,7 @@ $perfilUsuario = htmlspecialchars(
     </nav>
 
     <main class="container py-4">
+            <!-- Sidebar -->
+        <?php require_once __DIR__ . '/sidebar.php'; ?>
+
+    </main>

@@ -6,6 +6,10 @@ require_once __DIR__ . '/../../config/database.php';
 // Importa funções auxiliares de autenticação e sessão.
 require_once __DIR__ . '/../Middleware/auth.php';
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 class AuthController
 {
     // Armazena a conexão PDO.
@@ -94,7 +98,7 @@ class AuthController
         }
 
         // Gera um novo ID de sessão por segurança.
-        session_generate_id(true);
+        session_regenerate_id(true);
 
         // Salva na sessão apenas os dados necessários do usuário.
         $_SESSION['usuario'] = [

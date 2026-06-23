@@ -35,7 +35,7 @@ switch ($controller) {
                 break;
 
             default:
-                responderRotaNaoEncontrada('Acao de autenticacao nao encontrada.');
+                responderRotaNaoEncontrada('Ação de autenticação não encontrada.');
         }
         break;
 
@@ -65,7 +65,7 @@ switch ($controller) {
                 break;
 
             default:
-                responderRotaNaoEncontrada('Acao de usuarios nao encontrada.');
+                responderRotaNaoEncontrada('Ação de usuários não encontrada.');
         }
         break;
 
@@ -112,7 +112,8 @@ switch ($controller) {
                 break;
 
             case 'visualizar':
-                $atendimentosController->visualizar();
+            case 'buscar':
+                $atendimentosController->buscar();
                 break;
 
             case 'criar':
@@ -138,5 +139,5 @@ switch ($controller) {
 
 
     default:
-        responderRotaNaoEncontrada('Controller nao encontrado.');
+        responderRotaNaoEncontrada('Controller não encontrado.');
 }

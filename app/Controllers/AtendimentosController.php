@@ -65,26 +65,16 @@ class AtendimentosController
 
     public function criar(): void
     {
-        $pessoaId = filter_var(
-            $_POST['pessoa_id'] ?? null,
-            FILTER_VALIDATE_INT
-        );
-        $tipoId = filter_var(
-            $_POST['tipo_atendimento_id'] ?? null,
-            FILTER_VALIDATE_INT
-        );
-        $usuarioId = filter_var(
-            $_POST['usuario_id'] ?? null,
-            FILTER_VALIDATE_INT
-        );
+        $pessoaId = filter_var($_POST['pessoa_id'] ?? null, FILTER_VALIDATE_INT);
+        $tipoId = filter_var($_POST['tipo_atendimento_id'] ?? null, FILTER_VALIDATE_INT);
+        $usuarioId = filter_var($_POST['usuario_id'] ?? $_SESSION['usuario']['id'] ?? null, FILTER_VALIDATE_INT);
         
         $descricao = trim($_POST['descricao'] ?? '');
         $data = $_POST['data_atendimento'] ?? '';
         $horario = $_POST['horario_atendimento'] ?? '';
         $status = $_POST['status'] ?? 'aberto';
 
-        if (!$pessoaId || !$tipoId || !$usuarioId ||
-            $descricao === '' || $data === '' || $horario === '') {
+        if (!$pessoaId || !$tipoId || !$usuarioId || $descricao === '' || $data === '' || $horario === '') {
             $this->json(['erro' => 'Preencha os campos obrigatórios.'], 422);
             return;
         }
@@ -99,13 +89,13 @@ class AtendimentosController
             (pessoa_id, tipo_atendimento_id, usuario_id, descricao,
             status, data_atendimento, horario_atendimento)
             VALUES
-            (:pessoa_id, :tipo_id, :usuario_id, :descricao,
+            (:pessoa_id, :tipo_atendimento_id, :usuario_id, :descricao,
             :status, :data_atendimento, :horario_atendimento)'
         );
 
         $stmt->execute([
             'pessoa_id' => $pessoaId,
-            'tipo_id' => $tipoId,
+            'tipo_atendimento_id' => $tipoId,
             'usuario_id' => $usuarioId,
             'descricao' => $descricao,
             'status' => $status,
@@ -147,5 +137,11 @@ class AtendimentosController
         ]);
 
         $this->json(['mensagem' => 'Status atualizado com sucesso.']);
+    }
+
+    public function opcoesFormulario(): void
+    {
+        // Implementação básica - pode ser expandida conforme necessidade
+        $this->json(['erro' => '???.'], 501);
     }
 }
