@@ -24,7 +24,7 @@ class TiposAtendimentosController
         $this->json($this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC));
     }
 
-    public function buscar(): void
+    public function buscarPorId(): void
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if (!$id) {

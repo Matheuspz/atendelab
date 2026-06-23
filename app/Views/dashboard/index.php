@@ -1,0 +1,89 @@
+<?php
+$tituloPagina = 'Dashboard';
+require_once __DIR__ . '/../../layouts/header.php';
+?>
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+        <h1 class="h3 mb-1">Dashboard</h1>
+        <p class="text-secondary mb-0">
+            Resumo simples para validar a integração com o backend.
+        </p>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <!-- Card Pessoas -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-secondary small">Pessoas cadastradas</div>
+                <div class="display-6 fw-semibold" id="totalPessoas">0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Tipos -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-secondary small">Tipos de atendimento</div>
+                <div class="display-6 fw-semibold" id="totalTipos">0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Atendimentos -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-secondary small">Atendimentos registrados</div>
+                <div class="display-6 fw-semibold" id="totalAtendimentos">0</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Acesso Rápido -->
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <h2 class="h5">Acesso rápido</h2>
+        <p class="text-secondary">
+            Use os módulos abaixo para cadastrar e consultar dados reais do banco.
+        </p>
+
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-success" href="<?= $baseUrl ?>?controller=frontend&action=pessoas">
+                Gerenciar pessoas
+            </a>
+            <a class="btn btn-outline-success" href="<?= $baseUrl ?>?controller=frontend&action=tipos">
+                Gerenciar tipos
+            </a>
+            <a class="btn btn-outline-success" href="<?= $baseUrl ?>?controller=frontend&action=atendimentos">
+                Registrar atendimentos
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const targets = {
+        pessoas: document.getElementById('totalPessoas'),
+        tipos: document.getElementById('totalTipos'),
+        atendimentos: document.getElementById('totalAtendimentos')
+    };
+
+    for (const [controller, element] of Object.entries(targets)) {
+        try {
+            const response = await AtendeLabApi.get(controller, 'listar');
+            element.textContent = AtendeLabApi.toList(response).length;
+        } catch (error) {
+            element.textContent = '!';
+            element.title = error.message;
+        }
+    }
+});
+</script>
+
+<?php require_once __DIR__ . '/../../layouts/footer.php'; ?>
