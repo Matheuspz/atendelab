@@ -23,10 +23,10 @@ $perfilUsuario = htmlspecialchars(
     <title><?= htmlspecialchars($tituloPagina, ENT_QUOTES, 'UTF-8') ?> | AtendeLab</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= $baseUrl ?>assets/css/style.css">
+    <link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/style.css">
     
     <!-- API JavaScript (carregado antes dos scripts específicos das páginas) -->
-    <script src="<?= $baseUrl ?>assets/js/api.js"></script>
+    <script src="<?= $baseUrl ?>/assets/js/api.js"></script>
 </head>
 <body class="bg-light">
 
@@ -86,6 +86,6 @@ $perfilUsuario = htmlspecialchars(
 
     <main class="container py-4">
             <!-- Sidebar -->
-        <?php require_once __DIR__ . '/sidebar.php'; ?>
+        <!--<?php require_once __DIR__ . '/sidebar.php'; ?>-->
 
     </main>

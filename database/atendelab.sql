@@ -67,7 +67,7 @@ INSERT INTO usuarios (nome, email, senha, perfil, status)
 VALUES (
     'Administrador',
     'admin@atendelab.com',
-    '$2y$10$J9P2kU2BAMZ3TZcuxTsW4e1D/lka8EocYHzvyo0ZmCNcWDqz3RuVC',
+    '$2y$10$q7TDgyzrjr55l1fHgJnYiuR7748mmT46NI30i4I10fVn4j/K2CPEq',
     'admin',
     'ativo'
 );

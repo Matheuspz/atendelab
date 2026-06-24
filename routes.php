@@ -137,6 +137,37 @@ switch ($controller) {
         }
         break;
 
+        case 'pessoas':
+            exigirAutenticacao();
+            require_once __DIR__ . '/app/Controllers/PessoasController.php';
+            $tiposController = new PessoasController();
+    
+            switch ($action) {
+                case 'listar':
+                    $tiposController->listar();
+                    break;
+    
+                case 'buscarPorId':
+                    $tiposController->buscarPorId();
+                    break;
+    
+                case 'criar':
+                    $tiposController->criar();
+                    break;
+    
+                case 'atualizar':
+                    $tiposController->atualizar();
+                    break;
+    
+                case 'inativar':
+                    $tiposController->inativar();
+                    break;
+    
+                default:
+                    responderRotaNaoEncontrada('Ação de tipos de atendimento não encontrada.');
+                    break;
+            }
+            break;
 
     default:
         responderRotaNaoEncontrada('Controller não encontrado.');

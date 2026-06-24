@@ -45,8 +45,22 @@ class AuthController
 
     public function entrar(): void
     {
+        /*echo "<pre>";
+        var_dump([
+            'REQUEST_METHOD' => $_SERVER['REQUEST_METHOD'],
+            'controller' => $_GET['controller'] ?? 'não existe',
+            'action' => $_GET['action'] ?? 'não existe',
+            'POST' => $_POST
+        ]);
+        echo "</pre>";
+        exit;*/
+
         // Permite executar o login somente por requisição POST.
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+
+            $message = "DEU MUITA MERDA!";
+            echo "<script>console.log(" . json_encode($message) . ");</script>";
+            
             header('Location: ?controller=auth&action=login');
             exit;
         }
@@ -58,6 +72,10 @@ class AuthController
         // Verifica se os campos obrigatórios foram preenchidos.
         if ($email === '' || $senha === '') {
             $_SESSION['erro_login'] = 'Informe o e-mail e a senha.';
+
+            $message = "EMIAL ERADO!";
+            echo "<script>console.log(" . json_encode($message) . ");</script>";
+
             header('Location: ?controller=auth&action=login');
             exit;
         }
@@ -65,6 +83,10 @@ class AuthController
         // Verifica se o e-mail possui formato válido.
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['erro_login'] = 'Informe um e-mail válido.';
+
+            $message = "EMIAL INVALIDO!";
+            echo "<script>console.log(" . json_encode($message) . ");</script>";
+
             header('Location: ?controller=auth&action=login');
             exit;
         }
@@ -86,16 +108,23 @@ class AuthController
 
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
+
         // Valida usuário existente, status ativo e senha correta.
         if (
             !$usuario
             || $usuario['status'] !== 'ativo'
             || !password_verify($senha, $usuario['senha'])
+
         ) {
             $_SESSION['erro_login'] = 'E-mail ou senha inválidos.';
-            header('Location: ?controller=auth&action=login');
+
+            $message = "DEU MERDA!";
+            echo "<script>console.log(" . json_encode($message) . ");</script>";
+            
+            //header('Location: ?controller=auth&action=login');
             exit;
         }
+
 
         // Gera um novo ID de sessão por segurança.
         session_regenerate_id(true);
@@ -108,6 +137,8 @@ class AuthController
             'perfil' => $usuario['perfil'],
         ];
 
+        $message = "DEU BOOMMM!";
+            echo "<script>console.log(" . json_encode($message) . ");</script>";
         // Redireciona para o dashboard.
         header('Location: ?controller=auth&action=dashboard');
         exit;
@@ -122,7 +153,7 @@ class AuthController
         $usuario = usuarioAtual();
 
         // Carrega a página interna.
-        require __DIR__ . '/../Views/dashboard/index.php';
+        require __DIR__ . '../../Views/dashboard/index.php';
     }
 
     public function logout(): void

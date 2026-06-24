@@ -1,9 +1,9 @@
 <?php
 $tituloPagina = 'Dashboard';
-require_once __DIR__ . '/../../layouts/header.php';
+require_once __DIR__ . '../../layouts/header.php';
 ?>
 
-<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4 m-5 ">
     <div>
         <h1 class="h3 mb-1">Dashboard</h1>
         <p class="text-secondary mb-0">
@@ -12,7 +12,7 @@ require_once __DIR__ . '/../../layouts/header.php';
     </div>
 </div>
 
-<div class="row g-3 mb-4">
+<div class="row g-3 mb-4 m-5">
     <!-- Card Pessoas -->
     <div class="col-md-4">
         <div class="card border-0 shadow-sm h-100">
@@ -45,7 +45,7 @@ require_once __DIR__ . '/../../layouts/header.php';
 </div>
 
 <!-- Acesso Rápido -->
-<div class="card border-0 shadow-sm">
+<div class="card border-0 shadow-sm m-4">
     <div class="card-body">
         <h2 class="h5">Acesso rápido</h2>
         <p class="text-secondary">
@@ -86,4 +86,4 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 </script>
 
-<?php require_once __DIR__ . '/../../layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>
