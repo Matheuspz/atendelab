@@ -45,21 +45,12 @@ class AuthController
 
     public function entrar(): void
     {
-        /*echo "<pre>";
-        var_dump([
-            'REQUEST_METHOD' => $_SERVER['REQUEST_METHOD'],
-            'controller' => $_GET['controller'] ?? 'não existe',
-            'action' => $_GET['action'] ?? 'não existe',
-            'POST' => $_POST
-        ]);
-        echo "</pre>";
-        exit;*/
-
         // Permite executar o login somente por requisição POST.
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
-            $message = "DEU MUITA MERDA!";
-            echo "<script>console.log(" . json_encode($message) . ");</script>";
+            //Para Validação de Erro
+//            $message = "DEU MUITA MERDA!";
+//            echo "<script>console.log(" . json_encode($message) . ");</script>";
             
             header('Location: ?controller=auth&action=login');
             exit;
@@ -73,8 +64,9 @@ class AuthController
         if ($email === '' || $senha === '') {
             $_SESSION['erro_login'] = 'Informe o e-mail e a senha.';
 
-            $message = "EMIAL ERADO!";
-            echo "<script>console.log(" . json_encode($message) . ");</script>";
+            //Para Validação de Erro
+//            $message = "EMAIL OU SENHA ERADO!";
+//            echo "<script>console.log(" . json_encode($message) . ");</script>";
 
             header('Location: ?controller=auth&action=login');
             exit;
@@ -84,8 +76,9 @@ class AuthController
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['erro_login'] = 'Informe um e-mail válido.';
 
-            $message = "EMIAL INVALIDO!";
-            echo "<script>console.log(" . json_encode($message) . ");</script>";
+            //Para Validação de Erro
+//            $message = "EMAIL INVALIDO!";
+//            echo "<script>console.log(" . json_encode($message) . ");</script>";
 
             header('Location: ?controller=auth&action=login');
             exit;
@@ -94,37 +87,32 @@ class AuthController
         // Busca o usuário pelo e-mail.
         $sql = 'SELECT id, nome, email, senha, perfil, status
                 FROM usuarios
-                WHERE email = :email
-                LIMIT 1';
+                WHERE email = :email LIMIT 1';
 
         // Prepara a consulta para evitar SQL Injection.
         $stmt = $this->pdo->prepare($sql);
-
         // Substitui o parâmetro :email pelo valor informado.
         $stmt->bindValue(':email', $email);
-
         // Executa a consulta.
         $stmt->execute();
 
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-
 
         // Valida usuário existente, status ativo e senha correta.
         if (
             !$usuario
             || $usuario['status'] !== 'ativo'
             || !password_verify($senha, $usuario['senha'])
-
         ) {
             $_SESSION['erro_login'] = 'E-mail ou senha inválidos.';
 
-            $message = "DEU MERDA!";
-            echo "<script>console.log(" . json_encode($message) . ");</script>";
+            //Para Validação de Erro
+//            $message = "DEU MERDA!";
+//            echo "<script>console.log(" . json_encode($message) . ")</script>";
             
-            //header('Location: ?controller=auth&action=login');
+            header('Location: ?controller=auth&action=login');
             exit;
         }
-
 
         // Gera um novo ID de sessão por segurança.
         session_regenerate_id(true);
@@ -137,8 +125,10 @@ class AuthController
             'perfil' => $usuario['perfil'],
         ];
 
-        $message = "DEU BOOMMM!";
-            echo "<script>console.log(" . json_encode($message) . ");</script>";
+        //Para Validação de Erro
+//        $message = "DEU BOOMMM!";
+//            echo "<script>console.log(" . json_encode($message) . ");</script>";
+
         // Redireciona para o dashboard.
         header('Location: ?controller=auth&action=dashboard');
         exit;
@@ -153,7 +143,7 @@ class AuthController
         $usuario = usuarioAtual();
 
         // Carrega a página interna.
-        require __DIR__ . '../../Views/dashboard/index.php';
+        require __DIR__ . '/../Views/dashboard/index.php';
     }
 
     public function logout(): void

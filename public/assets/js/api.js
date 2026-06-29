@@ -71,14 +71,27 @@ window.AtendeLabApi = (() => {
     }
 
     function showAlert(id, message, type = 'success') {
-        const element = document.getElementById(id);
-        if (!element) return;
+        const container = document.getElementById(id);
+        if (!container) return;
 
-        element.innerHTML = `
-            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-                ${escape(message)}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>`;
+        container.innerHTML = '';
+
+        const alertHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+            <span>${escape ? escape(message) : message}</span>
+            <button type="button" class="btn-close" aria-label="Fechar"></button>
+        </div>`;
+
+        container.innerHTML = alertHTML;
+
+        const alertElement = container.querySelector('.alert');
+        if (alertElement) {
+            alertElement.addEventListener('click', function(e) {
+                if (e.target.classList.contains('btn-close')) {
+                    this.remove();
+                }
+            });
+        }
     }
 
     return {

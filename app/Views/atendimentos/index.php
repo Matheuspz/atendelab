@@ -3,7 +3,7 @@ $tituloPagina = 'Atendimentos';
 require_once __DIR__ . '/../layouts/header.php';
 ?>
 
-<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4 m-5">
     <div>
         <h1 class="h3 mb-1">Atendimentos</h1>
         <p class="text-secondary mb-0">
@@ -18,7 +18,7 @@ require_once __DIR__ . '/../layouts/header.php';
 <div id="alerta"></div>
 
 <!-- Formulário Novo Atendimento -->
-<div class="card border-0 shadow-sm mb-4 d-none" id="cardFormulario">
+<div class="card border-0 shadow-sm mb-4 d-none m-5" id="cardFormulario">
     <div class="card-body">
         <h2 class="h5">Novo atendimento</h2>
 
@@ -60,7 +60,7 @@ require_once __DIR__ . '/../layouts/header.php';
     </div>
 </div>
 
-<div class="card border-0 shadow-sm">
+<div class="card border-0 shadow-sm m-5">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
@@ -126,10 +126,15 @@ require_once __DIR__ . '/../layouts/header.php';
 const formAtendimento = document.getElementById('formAtendimento');
 const cardFormulario = document.getElementById('cardFormulario');
 
-const statusModal = () => {
-    return bootstrap.Modal.getOrCreateInstance(
-        document.getElementById('modalStatus')
-    );
+let modalStatusInstance = null;
+
+function getStatusModal() {
+    if (!modalStatusInstance) {
+        modalStatusInstance = bootstrap.Modal.getOrCreateInstance(
+            document.getElementById('modalStatus')
+        );
+    }
+    return modalStatusInstance;
 }
 
 function novoAtendimento() {
@@ -247,9 +252,13 @@ formAtendimento.addEventListener('submit', async event => {
 
 function abrirStatus(id, status) {
     document.getElementById('statusId').value = id;
-    document.querySelector('#formStatus [name="status"]').value = status || 'aberto';
+
+    const selectStatus = document.querySelector('#formStatus [name="status"]');
+    if (selectStatus) selectStatus.value = status || 'aberto';
+
     document.querySelector('#formStatus [name="observacao_final"]').value = '';
-    statusModal.show();
+
+    getStatusModal().show();
 }
 
 document.getElementById('formStatus').addEventListener('submit', async event => {
@@ -257,7 +266,7 @@ document.getElementById('formStatus').addEventListener('submit', async event => 
     try {
         await AtendeLabApi.post('atendimentos', 'alterarStatus', new FormData(event.target));
 
-        statusModal.hide();
+        getStatusModal().hide();
         AtendeLabApi.showAlert('alerta', 'Status atualizado com sucesso.', 'success');
         await carregarAtendimentos();
     } catch (error) {
@@ -275,4 +284,4 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 </script>
 
-<?php require_once __DIR__ . '/../../layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>

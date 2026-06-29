@@ -3,7 +3,7 @@ $tituloPagina = 'Pessoas atendidas';
 require_once __DIR__ . '/../layouts/header.php';
 ?>
 
-<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4 m-5">
     <div>
         <h1 class="h3 mb-1">Pessoas atendidas</h1>
         <p class="text-secondary mb-0">
@@ -18,7 +18,7 @@ require_once __DIR__ . '/../layouts/header.php';
 <div id="alerta"></div>
 
 <!-- Formulário -->
-<div class="card border-0 shadow-sm mb-4 d-none" id="cardFormulario">
+<div class="card border-0 shadow-sm mb-4 d-none m-5" id="cardFormulario">
     <div class="card-body">
         <h2 class="h5" id="tituloFormulario">Nova pessoa</h2>
 
@@ -78,7 +78,7 @@ require_once __DIR__ . '/../layouts/header.php';
 </div>
 
 <!-- Tabela -->
-<div class="card border-0 shadow-sm">
+<div class="card border-0 shadow-sm m-5">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
@@ -155,7 +155,7 @@ async function carregarPessoas() {
 
 async function editarPessoa(id) {
     try {
-        const p = AtendeLabApi.toObject(await AtendeLabApi.get('pessoas', 'buscar', { id }));
+        const p = AtendeLabApi.toObject(await AtendeLabApi.get('pessoas', 'buscarPorId', { id }));
 
         novaPessoa();
         document.getElementById('tituloFormulario').textContent = 'Editar pessoa';
@@ -197,4 +197,4 @@ formPessoa.addEventListener('submit', async event => {
 document.addEventListener('DOMContentLoaded', carregarPessoas);
 </script>
 
-<?php require_once __DIR__ . '/../../layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>

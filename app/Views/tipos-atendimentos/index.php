@@ -3,7 +3,7 @@ $tituloPagina = 'Tipos de atendimento';
 require_once __DIR__ . '/../layouts/header.php';
 ?>
 
-<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4 m-5">
     <div>
         <h1 class="h3 mb-1">Tipos de atendimento</h1>
         <p class="text-secondary mb-0">
@@ -18,7 +18,7 @@ require_once __DIR__ . '/../layouts/header.php';
 <div id="alerta"></div>
 
 <!-- Formulário -->
-<div class="card border-0 shadow-sm mb-4 d-none" id="cardFormulario">
+<div class="card border-0 shadow-sm mb-4 d-none m-5" id="cardFormulario">
     <div class="card-body">
         <h2 class="h5" id="tituloFormulario">Novo tipo</h2>
 
@@ -55,7 +55,7 @@ require_once __DIR__ . '/../layouts/header.php';
 </div>
 
 <!-- Tabela -->
-<div class="card border-0 shadow-sm">
+<div class="card border-0 shadow-sm m-5">
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
@@ -140,7 +140,7 @@ async function carregarTipos() {
 
 async function editarTipo(id) {
     try {
-        const resposta = await AtendeLabApi.get('tipos', 'buscar', { id });
+        const resposta = await AtendeLabApi.get('tipos', 'buscarPorId', { id });
         const tipo = AtendeLabApi.toObject(resposta);
 
         novoTipo();
@@ -187,4 +187,4 @@ formTipo.addEventListener('submit', async event => {
 document.addEventListener('DOMContentLoaded', carregarTipos);
 </script>
 
-<?php require_once __DIR__ . '/../../layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>
