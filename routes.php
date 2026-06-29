@@ -1,8 +1,13 @@
 <?php
 
 require_once __DIR__ . '/app/Controllers/AuthController.php';
+require_once __DIR__ . '/app/Controllers/FrontendController.php';
 require_once __DIR__ . '/app/Controllers/UsuariosController.php';
 require_once __DIR__ . '/app/Middleware/auth.php';
+require_once __DIR__ . '/app/Controllers/PessoasController.php';
+require_once __DIR__ . '/app/Controllers/TiposAtendimentosController.php';
+require_once __DIR__ . '/app/Controllers/AtendimentosController.php';
+
 
 $controller = $_GET['controller'] ?? 'auth';
 $action = $_GET['action'] ?? 'login';
@@ -39,6 +44,26 @@ switch ($controller) {
         }
         break;
 
+    case 'frontend':
+        $frontendController = new FrontendController();
+
+        switch ($action) {
+            case 'pessoas':
+                $frontendController->exibirPessoas();
+                break;
+            case 'tipos':
+                $frontendController->exibirTipos();
+                break;
+            case 'atendimentos':
+                $frontendController->exibirAtendimentos();
+                break;
+
+            default:
+                responderRotaNaoEncontrada('Ação de frontend não encontrada.');
+        }
+        break;
+
+
     case 'usuarios':
         exigirAutenticacao();
         $usuariosController = new UsuarioController();
@@ -71,28 +96,27 @@ switch ($controller) {
 
     case 'tipos':
         exigirAutenticacao();
-        require_once __DIR__ . '/app/Controllers/TiposAtendimentosController.php';
-        $tiposController = new TiposAtendimentosController();
+        $pessoasController = new TiposAtendimentosController();
 
         switch ($action) {
             case 'listar':
-                $tiposController->listar();
+                $pessoasController->listar();
                 break;
 
             case 'buscarPorId':
-                $tiposController->buscarPorId();
+                $pessoasController->buscarPorId();
                 break;
 
             case 'criar':
-                $tiposController->criar();
+                $pessoasController->criar();
                 break;
 
             case 'atualizar':
-                $tiposController->atualizar();
+                $pessoasController->atualizar();
                 break;
 
             case 'inativar':
-                $tiposController->inativar();
+                $pessoasController->inativar();
                 break;
 
             default:
@@ -103,7 +127,6 @@ switch ($controller) {
 
     case 'atendimentos':
         exigirAutenticacao();
-        require_once __DIR__ . '/app/Controllers/AtendimentosController.php';
         $atendimentosController = new AtendimentosController();
 
         switch ($action) {
@@ -139,30 +162,29 @@ switch ($controller) {
 
         case 'pessoas':
             exigirAutenticacao();
-            require_once __DIR__ . '/app/Controllers/PessoasController.php';
-            $tiposController = new PessoasController();
-    
+            $pessoasController = new PessoasController();
+
             switch ($action) {
                 case 'listar':
-                    $tiposController->listar();
+                    $pessoasController->listar();
                     break;
-    
+
                 case 'buscarPorId':
-                    $tiposController->buscarPorId();
+                    $pessoasController->buscarPorId();
                     break;
-    
+
                 case 'criar':
-                    $tiposController->criar();
+                    $pessoasController->criar();
                     break;
-    
+
                 case 'atualizar':
-                    $tiposController->atualizar();
+                    $pessoasController->atualizar();
                     break;
-    
+
                 case 'inativar':
-                    $tiposController->inativar();
+                    $pessoasController->inativar();
                     break;
-    
+
                 default:
                     responderRotaNaoEncontrada('Ação de tipos de atendimento não encontrada.');
                     break;
